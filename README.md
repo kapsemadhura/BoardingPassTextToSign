@@ -3,7 +3,7 @@ Enhancing Accessibility for Hearing-Impaired Travelers with  Real-Time Sign Lang
 
 # Flask App for YOLOv5 Object Detection
 
-This Flask application performs object detection using a YOLOv5 model. The app allows users to upload images, processes them using the trained model, and displays the detected objects with bounding boxes on the web interface. 
+This Flask application performs object detection and extracts the text and covert to sign language. The app allows users to upload images, processes them using the trained model, and displays the detected objects with bounding boxes on the web interface. 
 
 ## Features
 - Upload images for object detection
