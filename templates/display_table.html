@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extracted Flight Information</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .thank-you-message {
+            margin-top: 40px;
+            text-align: center;
+            padding: 30px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            border-radius: 10px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .character-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .character-images img {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+        }
+
+        .data-field {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Flight Information Extraction</h1>
+        <p>Here are your extracted flight details along with the corresponding character images.</p>
+    </header>
+
+    <div class="container">
+        <h2>Upload Your Boarding Pass</h2>
+        <form id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+            <div class="form-group">
+                <label for="fileInput">Select an image file (JPG, PNG):</label>
+                <input type="file" id="fileInput" name="file" class="form-control" accept=".jpg,.jpeg,.png" required>
+                <div class="error-message" id="errorMessage">Please upload a file in JPG or PNG format only.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <h2>Extracted Flight Information</h2>
+        <div class="data-field">
+            <strong>Passenger Name:</strong>
+            <p>{{ data['Passenger Name'] }}</p>
+            <div class="character-images">
+                {% for image in images['Passenger Name'] %}
+                <img src="{{ url_for('static', filename='images/characters/' + image) }}" alt="{{ image }}">
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="data-field">
+            <strong>Boarding Time:</strong>
+            <p>{{ data['Boarding Time'] }}</p>
+            <div class="character-images">
+                {% for image in images['Boarding Time'] %}
+                <img src="{{ url_for('static', filename='images/characters/' + image) }}" alt="{{ image }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="data-field">
+            <strong>Flight Number:</strong>
+            <p>{{ data['Flight'] }}</p>
+            <div class="character-images">
+                {% for image in images['Flight'] %}
+                <img src="{{ url_for('static', filename='images/characters/' + image) }}" alt="{{ image }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="data-field">
+            <strong>Gate Number:</strong>
+            <p>{{ data['Gate'] }}</p>
+            <div class="character-images">
+                {% for image in images['Gate'] %}
+                <img src="{{ url_for('static', filename='images/characters/' + image) }}" alt="{{ image }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="data-field">
+            <strong>Seat Number:</strong>
+            <p>{{ data['Seat'] }}</p>
+            <div class="character-images">
+                {% for image in images['Seat'] %}
+                <img src="{{ url_for('static', filename='images/characters/' + image) }}" alt="{{ image }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Thank You Message -->
+        <div class="thank-you-message">
+            <h2>Thank you for using our application!</h2>
+            <p>Your flight details have been successfully extracted. If you need further assistance, feel free to contact us.</p>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Flight Information Extraction. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for file validation -->
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const fileInput = document.getElementById('fileInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const fileType = file.type;
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+                if (!validTypes.includes(fileType)) {
+                    event.preventDefault();  // Prevent form submission
+                    errorMessage.style.display = 'block';
+                } else {
+                    errorMessage.style.display = 'none';
+                }
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS (Optional but recommended for better form handling and animations) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
