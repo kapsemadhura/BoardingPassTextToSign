@@ -1,1 +1,2 @@
-
+This folder contains test image files of boarding passes.
+Clear and high quality images required for correct OCR processing.
